@@ -19,6 +19,7 @@
   </div>
 
 <script>
+// DOM操作
 var canvas = document.getElementById("myCanvas");
 var notice = document.getElementById("notice");
 var button = document.getElementById("retry");
@@ -76,6 +77,7 @@ addEventListener("mousemove", e => {
   }
 }, false);
 
+// ブロック衝突の検知
 function collisionDetection() {
   for(var c=0; c<brick.ColumnCount; c++) {
     for(var r=0; r<brick.RowCount; r++) {
@@ -99,10 +101,12 @@ function collisionDetection() {
   }
 }
 
+// 初期化
 function setup() {
   button.disabled = true;
   notice.textContent = "GAME START";
   notice.classList.remove("alert-danger");
+  notice.classList.remove("alert-success");
   notice.classList.add("alert-primary");
 
   x = canvas.width/2;
@@ -172,14 +176,15 @@ function draw() {
   if(y + dy < ballRadius) { // seil
     dy = -dy;
   }
-  else if (y + dy > canvas.height - ballRadius) { // floar
+  else if (y + dy > canvas.height - ballRadius) { // floor
+    // パドルの衝突判定
     if(x > paddleX && x < paddleX + paddleWidth) {
+      // 衝突位置で反射角度を調節
       var diffX = x - (paddleX + paddleWidth/2);
       dx = diffX/7;
       dy = -dy;
     }
     else {
-      // ボールが落ちた
       clearInterval(interval);
       notice.classList.remove("alert-primary");
       notice.classList.add("alert-danger");
@@ -187,7 +192,7 @@ function draw() {
       button.disabled = false;
     }
   }
-  // 衝突判定
+  // ブロックの衝突判定
   collisionDetection();
 
 
@@ -208,6 +213,7 @@ function draw() {
   drawBricks();
   // パドルを描画
   drawBall();
+  // スコアを描画
   drawScore();
 }
 
